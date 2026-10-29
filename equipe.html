@@ -5,11 +5,11 @@
   <meta name="robots" content="noindex, nofollow"><title>Área da equipe · Mapa Cultural de Avaré</title>
   <link rel="stylesheet" href="styles.css">
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script defer src="config.js"></script><script defer src="equipe.js"></script>
+  <script defer src="config.js"></script><script defer src="equipe.js"></script><script defer src="equipe-avaliacoes.js"></script>
 </head>
-<body>
-  <header><div class="wrap"><nav aria-label="Navegação principal"><a href="index.html">← Ver catálogo</a><button id="sair" class="secondary" hidden>Sair</button></nav><h1>Área da equipe</h1><p>Organize os cadastros e escolha o que aparece no catálogo.</p></div></header>
-  <main class="wrap">
+<body class="admin-page">
+  <header class="admin-header"><div class="wrap"><nav aria-label="Navegação principal"><a href="index.html">← Ver catálogo</a><button id="sair" class="secondary" hidden>Sair</button></nav><h1>Área da equipe</h1><p>Organize os cadastros e escolha o que aparece no catálogo.</p></div></header>
+  <main class="wrap admin-main">
     <p id="status" class="status" role="status" aria-live="polite">Verificando acesso…</p>
     <section id="login" class="panel auth" hidden>
       <h2>Entrar</h2><p>Use a conta liberada pela coordenação.</p>
@@ -30,19 +30,37 @@
       <p id="conta" class="hint"></p><div class="admin-layout">
         <section class="panel"><h2 id="titulo-editor">Novo artista</h2>
           <form id="form-artista">
-            <label for="nome">Nome artístico *</label><input id="nome" required maxlength="160">
+            <fieldset class="form-section"><legend><span>1</span> Apresentação</legend><label for="nome">Nome artístico *</label><input id="nome" required maxlength="160">
             <label for="biografia">Biografia</label><textarea id="biografia" maxlength="5000"></textarea>
             <label for="areas">Áreas de atuação</label><input id="areas" maxlength="1000" aria-describedby="ajuda-areas">
             <p id="ajuda-areas" class="hint">Separe por vírgulas. Ex.: Música, Teatro, Artes visuais.</p>
+            </fieldset>
+            <div id="perfil-aviso" class="hint" hidden>O formulário básico está disponível. A coordenação precisa ativar os campos completos para liberar foto, contatos e portfólio.</div>
+            <fieldset id="campos-perfil" class="form-section"><legend><span>2</span> Perfil completo</legend>
+              <label for="resumo">Apresentação curta</label><input id="resumo" maxlength="240" placeholder="Uma frase para apresentar o trabalho do artista.">
+              <div class="form-row"><div><label for="cidade">Cidade</label><input id="cidade" maxlength="100" value="Avaré"></div><div><label for="bairro">Bairro ou região</label><input id="bairro" maxlength="120"></div></div>
+              <label for="foto">Foto do artista ou de seu trabalho</label><input id="foto" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="foto-ajuda"><p id="foto-ajuda" class="hint">JPG, PNG ou WebP, até 5 MB. Use uma imagem autorizada pelo artista.</p>
+              <img id="foto-preview" class="photo-preview" alt="Prévia da foto do artista" hidden>
+              <input id="foto-url" type="hidden"><button id="remover-foto" class="secondary" type="button" hidden>Remover foto do perfil</button>
+              <label for="trabalhos">Trabalhos e trajetória</label><textarea id="trabalhos" maxlength="5000" placeholder="Projetos, apresentações, exposições e outras experiências."></textarea>
+              <h3 class="subheading">Links e contatos públicos</h3><p class="hint">Preencha apenas o que o artista autorizar mostrar no site.</p>
+              <label for="instagram">Instagram (link completo)</label><input id="instagram" type="url" maxlength="500" placeholder="https://www.instagram.com/...">
+              <label for="site">Site</label><input id="site" type="url" maxlength="500" placeholder="https://...">
+              <label for="portfolio">Link de portfólio ou vídeo</label><input id="portfolio" type="url" maxlength="500" placeholder="https://...">
+              <label for="contato-email">E-mail público de contato</label><input id="contato-email" type="email" maxlength="254">
+              <label for="whatsapp">WhatsApp público (com país e DDD)</label><input id="whatsapp" type="tel" maxlength="24" placeholder="55 14 99999-9999">
+            </fieldset>
+            <fieldset class="form-section"><legend><span>3</span> Publicação</legend>
             <label><input id="publicado" type="checkbox">Publicar no catálogo</label>
             <p class="hint">Desmarcado: só a equipe vê o cadastro. Publique apenas informações autorizadas pelo artista. Não inclua documentos ou dados privados.</p>
-            <div class="actions"><button id="salvar" type="submit">Salvar cadastro</button><button id="novo" class="secondary" type="button">Limpar / novo</button></div>
+            </fieldset><div class="actions"><button id="salvar" type="submit">Salvar cadastro</button><button id="novo" class="secondary" type="button">Limpar / novo</button></div>
           </form>
         </section>
         <section class="panel"><h2>Cadastros</h2><label for="filtro">Buscar na equipe</label><input id="filtro" type="search" placeholder="Nome ou área cultural">
-          <p id="contagem" role="status"></p><div id="lista"></div><button id="recarregar" class="secondary" type="button">Atualizar lista</button>
+          <label for="filtro-status">Mostrar</label><select id="filtro-status"><option value="todos">Todos os cadastros</option><option value="publicados">Publicados</option><option value="rascunhos">Rascunhos</option></select><p id="contagem" role="status"></p><div id="lista"></div><div class="actions"><button id="recarregar" class="secondary" type="button">Atualizar lista</button><button id="exportar" class="secondary" type="button">Exportar planilha</button></div>
         </section>
       </div>
+      <section id="moderacao" class="panel" aria-labelledby="titulo-moderacao"><h2 id="titulo-moderacao">Avaliações do público</h2><p class="hint">Revise antes de publicar. Dados de contato e comentários ofensivos não devem ser aprovados.</p><div class="actions"><button id="ver-pendentes" type="button" class="secondary">Aguardando aprovação</button><button id="ver-aprovadas" type="button" class="secondary">Já publicadas</button><button id="ver-rejeitadas" type="button" class="secondary">Não aprovadas</button></div><p id="moderacao-status" role="status"></p><div id="moderacao-lista"></div></section>
     </section>
   </main>
 </body>

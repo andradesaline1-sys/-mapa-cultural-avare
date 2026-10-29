@@ -3,7 +3,12 @@
   const $ = id => document.getElementById(id);
   let banco, usuario, registros = [], editando = null, carregamento = 0;
   let senhaPendente = /(?:[?#&])type=(?:recovery|invite)(?:&|$)/.test(location.hash);
-  let ocupado = false;
+  let ocupado = false, perfilDisponivel = false, fotoArquivo = null, fotoObjeto = null, formularioAlterado = false;
+  const camposPerfil = {resumo:'resumo', cidade:'cidade', bairro:'bairro', trabalhos:'trabalhos', instagram:'instagram', site:'site', portfolio_url:'portfolio', contato_email:'contato-email', whatsapp:'whatsapp', foto_url:'foto-url'};
+  function mostrarFoto(url) { $('foto-preview').hidden = !url; $('remover-foto').hidden = !url; if (url) $('foto-preview').src = url; else $('foto-preview').removeAttribute('src'); }
+  function preencherPerfil(perfil = {}) { for (const [campo, id] of Object.entries(camposPerfil)) $(id).value = perfil[campo] || (campo === 'cidade' ? 'Avaré' : ''); mostrarFoto(perfil.foto_url); }
+  function urlSegura(s) { try { const u = new URL(s); return u.protocol === 'https:' && !u.username && !u.password; } catch { return false; } }
+
   const normalizar = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   const status = (texto, erro = false) => { $('status').textContent = texto; $('status').classList.toggle('error', erro); };
   const mensagemErro = e => ['PGRST205', '42P01'].includes(e?.code)
@@ -11,15 +16,15 @@
     : 'Não foi possível concluir a operação. Verifique a conexão e suas permissões e tente novamente.';
 
   function limpar() {
-    editando = null; $('form-artista').reset(); $('titulo-editor').textContent = 'Novo artista';
+    editando = null; $('form-artista').reset(); $('titulo-editor').textContent = 'Novo artista'; fotoArquivo = null; if (fotoObjeto) URL.revokeObjectURL(fotoObjeto); fotoObjeto = null; mostrarFoto(''); formularioAlterado = false;
   }
   function mudou() {
-    return editando !== null || $('nome').value.trim() || $('biografia').value.trim() || $('areas').value.trim();
+    return formularioAlterado || fotoArquivo !== null;
   }
   function podeDescartar() { return !mudou() || window.confirm('Descartar o formulário atual?'); }
   function listar() {
     const termo = normalizar($('filtro').value);
-    const encontrados = registros.filter(a => normalizar(`${a.nome_artistico} ${a.areas_atuacao.join(' ')}`).includes(termo));
+    const encontrados = registros.filter(a => normalizar(`${a.nome_artistico} ${a.areas_atuacao.join(' ')} ${a.perfil?.bairro || ''}`).includes(termo) && ($('filtro-status').value === 'todos' || a.publicado === ($('filtro-status').value === 'publicados')));
     $('lista').replaceChildren();
     $('contagem').textContent = registros.length === 0 ? 'Nenhum cadastro ainda. Comece pelo formulário.' : `${encontrados.length} cadastro(s) encontrado(s).`;
     for (const a of encontrados) {
@@ -32,14 +37,21 @@
         if (ocupado || !podeDescartar()) return;
         editando = a.id; $('nome').value = a.nome_artistico; $('biografia').value = a.biografia;
         $('areas').value = a.areas_atuacao.join(', '); $('publicado').checked = a.publicado;
-        $('titulo-editor').textContent = 'Editar artista'; $('nome').focus();
+        preencherPerfil(a.perfil); fotoArquivo = null; $('foto').value = ''; formularioAlterado = false; $('titulo-editor').textContent = 'Editar artista'; $('nome').focus();
       });
       item.append(titulo, descricao, editar); $('lista').appendChild(item);
     }
   }
   async function atualizar() {
     const versao = carregamento;
-    const { data, error } = await banco.from(window.MAPA_CONFIG.table).select('id,nome_artistico,biografia,areas_atuacao,publicado').order('nome_artistico');
+    let resultado = await banco.from(window.MAPA_CONFIG.table).select('id,nome_artistico,biografia,areas_atuacao,publicado,perfil').order('nome_artistico');
+    perfilDisponivel = true;
+    if (resultado.error && ['42703', 'PGRST204'].includes(resultado.error.code)) {
+      perfilDisponivel = false;
+      resultado = await banco.from(window.MAPA_CONFIG.table).select('id,nome_artistico,biografia,areas_atuacao,publicado').order('nome_artistico');
+    }
+    $('campos-perfil').hidden = !perfilDisponivel; $('campos-perfil').disabled = !perfilDisponivel; $('perfil-aviso').hidden = perfilDisponivel;
+    const { data, error } = resultado;
     if (versao !== carregamento) return;
     if (error) throw error;
     registros = data || []; listar();
@@ -49,7 +61,7 @@
     usuario = session?.user || null;
     $('login').hidden = true; $('painel').hidden = true; $('nova-senha').hidden = true;
     $('sair').hidden = !usuario; registros = []; $('lista').replaceChildren(); limpar();
-    if (!usuario) { $('login').hidden = false; status('Entre para gerenciar os cadastros.'); return; }
+    if (!usuario) { document.dispatchEvent(new Event('equipesaiu')); $('login').hidden = false; status('Entre para gerenciar os cadastros.'); return; }
     if (senhaPendente) { $('nova-senha').hidden = false; status('Defina sua senha para continuar.'); return; }
     status('Verificando permissão da equipe…');
     try {
@@ -60,7 +72,7 @@
       await atualizar();
       if (versao !== carregamento) return;
       $('conta').textContent = `Conectado como ${usuario.email}`; $('painel').hidden = false;
-      status('Acesso liberado. Cadastros salvos como rascunho só aparecem para a equipe.');
+      status('Acesso liberado. Cadastros salvos como rascunho só aparecem para a equipe.'); document.dispatchEvent(new CustomEvent('equipepronta', { detail: { banco, usuario } }));
     } catch (e) { if (versao === carregamento) status(mensagemErro(e), true); }
   }
 
@@ -112,10 +124,28 @@
     if (!nome) { status('Informe o nome artístico.', true); $('nome').focus(); return; }
     const areas = [...new Set($('areas').value.split(',').map(a => a.trim()).filter(Boolean))];
     if (areas.length > 20 || areas.some(a => a.length > 80)) { status('Use até 20 áreas, com até 80 caracteres em cada uma.', true); return; }
-    ocupado = true; $('salvar').disabled = true; $('novo').disabled = true; status('Salvando cadastro…');
+    const perfil = {};
+    if (perfilDisponivel) {
+      for (const [campo, id] of Object.entries(camposPerfil)) perfil[campo] = $(id).value.trim();
+      for (const campo of ['instagram', 'site', 'portfolio_url']) if (perfil[campo] && !urlSegura(perfil[campo])) { status('Use links completos começando com https:// nos contatos e no portfólio.', true); return; }
+      perfil.whatsapp = perfil.whatsapp.replace(/[^0-9]/g, '');
+      if (perfil.whatsapp && !/^\d{10,15}$/.test(perfil.whatsapp)) { status('Confira o WhatsApp, incluindo país e DDD.', true); return; }
+    }
+    ocupado = true; for (const f of $('form-artista').querySelectorAll('fieldset')) f.disabled = true; $('salvar').disabled = true; $('novo').disabled = true; status('Salvando cadastro…');
     const versao = carregamento;
     try {
+      if (perfilDisponivel && fotoArquivo) {
+        status('Enviando foto e salvando cadastro…');
+        const extensao = {'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[fotoArquivo.type];
+        const caminho = `${usuario.id}/${crypto.randomUUID()}.${extensao}`;
+        const { error } = await banco.storage.from('avare-perfis').upload(caminho, fotoArquivo, { contentType: fotoArquivo.type, upsert: false });
+        if (error) throw error;
+        perfil.foto_url = banco.storage.from('avare-perfis').getPublicUrl(caminho).data.publicUrl;
+        $('foto-url').value = perfil.foto_url; fotoArquivo = null;
+      }
+      if (versao !== carregamento) return;
       const valores = { nome_artistico: nome, biografia: $('biografia').value.trim(), areas_atuacao: areas, publicado: $('publicado').checked };
+      if (perfilDisponivel) valores.perfil = perfil;
       const tabela = banco.from(window.MAPA_CONFIG.table);
       const operacao = editando ? tabela.update(valores).eq('id', editando) : tabela.insert(valores);
       const { data, error } = await operacao.select('id').single();
@@ -124,10 +154,25 @@
       limpar(); status('Cadastro salvo.');
       try { await atualizar(); } catch { status('Cadastro salvo, mas a lista não pôde ser atualizada. Clique em Atualizar lista.', true); }
     } catch (e) { if (versao === carregamento) status(mensagemErro(e), true); }
-    finally { ocupado = false; $('salvar').disabled = false; $('novo').disabled = false; }
+    finally { ocupado = false; for (const f of $('form-artista').querySelectorAll('fieldset')) f.disabled = false; $('campos-perfil').disabled = !perfilDisponivel; $('salvar').disabled = false; $('novo').disabled = false; }
   });
   $('novo').addEventListener('click', () => { if (!ocupado && podeDescartar()) limpar(); });
   $('filtro').addEventListener('input', listar);
+  $('filtro-status').addEventListener('change', listar);
+  $('form-artista').addEventListener('input', () => { formularioAlterado = true; });
+  $('foto').addEventListener('change', () => {
+    const arquivo = $('foto').files[0]; if (!arquivo) return;
+    if (!['image/jpeg','image/png','image/webp'].includes(arquivo.type) || arquivo.size > 5242880) { status('Escolha uma foto JPG, PNG ou WebP de até 5 MB.', true); $('foto').value = ''; return; }
+    if (fotoObjeto) URL.revokeObjectURL(fotoObjeto);
+    fotoArquivo = arquivo; fotoObjeto = URL.createObjectURL(arquivo); mostrarFoto(fotoObjeto); formularioAlterado = true;
+  });
+  $('remover-foto').addEventListener('click', () => { fotoArquivo = null; $('foto').value = ''; $('foto-url').value = ''; mostrarFoto(''); formularioAlterado = true; });
+  $('exportar').addEventListener('click', () => {
+    const celula = v => { let s = String(v ?? ''); if (/^[=+@\-\t\r]/.test(s)) s = "'" + s; return '"' + s.replace(/"/g, '""') + '"'; };
+    const linhas = [['Nome artístico','Áreas','Biografia','Publicado','Apresentação','Cidade','Bairro','Trabalhos','Instagram','Site','Portfólio','E-mail público','WhatsApp','Foto'], ...registros.map(a => [a.nome_artistico,a.areas_atuacao.join(', '),a.biografia,a.publicado?'Sim':'Não',a.perfil?.resumo,a.perfil?.cidade,a.perfil?.bairro,a.perfil?.trabalhos,a.perfil?.instagram,a.perfil?.site,a.perfil?.portfolio_url,a.perfil?.contato_email,a.perfil?.whatsapp,a.perfil?.foto_url])];
+    const blob = new Blob(['\ufeff' + linhas.map(l => l.map(celula).join(';')).join('\r\n')], {type:'text/csv;charset=utf-8'});
+    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'catalogo-avare.csv'; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
   $('recarregar').addEventListener('click', async () => {
     $('recarregar').disabled = true;
     try { await atualizar(); status('Lista atualizada.'); } catch (e) { status(mensagemErro(e), true); }
@@ -136,8 +181,7 @@
   window.addEventListener('beforeunload', event => { if (mudou()) { event.preventDefault(); event.returnValue = ''; } });
   try {
     if (!window.supabase || !window.MAPA_CONFIG) throw new Error('Biblioteca indisponível');
-    const c = window.MAPA_CONFIG;
-    banco = window.supabase.createClient(c.url, c.publicKey);
+    banco = window.mapaBanco();
     banco.auth.onAuthStateChange((evento, session) => {
       if (evento === 'PASSWORD_RECOVERY') senhaPendente = true;
       // O Supabase pode repetir SIGNED_IN ao voltar para a aba. Preserve o formulário.
