@@ -5,40 +5,31 @@
   <meta name="theme-color" content="#ffffff">
   <meta name="description" content="Catálogo de artistas e profissionais da cultura de Avaré. Consulte perfis, áreas de atuação, trabalhos e contatos.">
   <title>Mapa Cultural de Avaré — Catálogo de artistas</title>
-  <link rel="stylesheet" href="styles.css?v=profissional-2">
+  <link rel="stylesheet" href="styles.css?v=social-1">
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script defer src="config.js"></script><script defer src="avaliacoes.js"></script><script defer src="catalogo.js"></script>
 </head>
 <body class="public-site">
   <a class="skip-link" href="#catalogo">Pular para o catálogo</a>
-  <header class="site-header"><div class="wrap header-layout">
-    <!-- Substitua o conteúdo deste espaço pela imagem oficial quando ela for fornecida. -->
-    <div class="culture-logo" role="img" aria-label="Espaço reservado para a logo da Cultura"><span>Logo da Cultura</span><small>Espaço reservado</small></div>
-    <a href="index.html" class="site-name">Mapa Cultural<span>Avaré</span></a>
-    <nav class="nav-links" aria-label="Navegação principal"><a href="#catalogo">Artistas</a><a href="#sobre">Sobre</a><a class="nav-team" href="equipe.html">Área da equipe</a></nav>
+  <header class="site-header social-topbar"><div class="wrap header-layout">
+    <a href="index.html" class="site-name">Mapa Cultural</a>
+    <nav class="nav-links" aria-label="Navegação principal"><a href="#catalogo">Explorar</a><a href="#sobre">Sobre</a><a class="nav-team" href="equipe.html">Área da equipe</a></nav>
   </div></header>
-  <main>
-    <section class="catalog-intro wrap" aria-labelledby="titulo-busca">
-      <div class="intro-copy">
-        <p class="intro-label">CATÁLOGO CULTURAL</p>
-        <h1 id="titulo-busca">Artistas e profissionais<br>da cultura.</h1>
-        <p class="intro-description">Encontre profissionais por área de atuação. Consulte trajetórias, conheça trabalhos e acesse os contatos de cada artista.</p>
-        <div class="intro-actions"><a class="button" href="#catalogo">Consultar catálogo <span class="arrow" aria-hidden="true"></span></a><a href="#sobre">Como funciona</a></div>
+  <main class="social-main">
+    <section class="account-profile wrap" aria-labelledby="titulo-busca">
+      <!-- Espaço reservado para a imagem oficial da Cultura. -->
+      <div class="profile-logo-ring"><div class="culture-logo" role="img" aria-label="Espaço reservado para a logo da Cultura"><span>Logo da<br>Cultura</span></div></div>
+      <div class="account-info">
+        <div class="account-title"><h1 id="titulo-busca">mapacultural</h1><a class="account-explore" href="#catalogo">Explorar artistas</a></div>
+        <div class="account-stats" aria-label="Informações do catálogo"><span><strong id="total-artistas">0</strong> artistas</span><span><strong id="total-areas">7</strong> áreas culturais</span></div>
+        <p class="account-name">Cultura de Avaré</p><p class="account-bio">Perfis, trabalhos e contatos dos artistas.<br>Explore por área e conheça cada profissional.</p>
+        <a class="account-about" href="#sobre">Sobre o catálogo</a>
       </div>
-      <aside class="area-spotlight" aria-labelledby="areas-titulo">
-        <div class="spotlight-heading"><span class="spotlight-label">ÁREAS DE ATUAÇÃO</span><h2 id="areas-titulo">Explore o catálogo<br>por especialidade</h2></div>
-        <div class="spotlight-links">
-          <a href="#catalogo" data-area="Música"><span class="area-number">01</span><span>Música</span><span class="arrow" aria-hidden="true"></span></a>
-          <a href="#catalogo" data-area="Artes visuais"><span class="area-number">02</span><span>Artes visuais</span><span class="arrow" aria-hidden="true"></span></a>
-          <a href="#catalogo" data-area="Artesanato"><span class="area-number">03</span><span>Artesanato</span><span class="arrow" aria-hidden="true"></span></a>
-        </div>
-        <a href="#catalogo" class="all-areas" data-area="">Ver todas as áreas <span class="arrow" aria-hidden="true"></span></a>
-      </aside>
     </section>
     <section id="catalogo" class="wrap catalog-section" aria-label="Consulta de artistas">
-      <div class="catalog-heading"><h2>Consulte os artistas</h2><p>Busque por nome ou selecione uma área de atuação.</p></div>
       <div class="search-box"><label for="busca" class="sr-only">Buscar artista, área ou bairro</label><span aria-hidden="true">⌕</span><input id="busca" type="search" placeholder="Buscar por nome, área de atuação ou bairro" disabled></div>
       <div id="categorias" class="category-filters" role="group" aria-label="Filtrar por área cultural"></div>
+      <div class="view-tabs" role="group" aria-label="Visualização do catálogo"><button id="visao-grade" class="view-tab" type="button" aria-pressed="true"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>Grade</button><button id="visao-feed" class="view-tab" type="button" aria-pressed="false"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 8h16M8 17h8"/></svg>Feed</button></div>
       <div class="results-toolbar"><p id="mensagem" role="status" aria-live="polite">Carregando artistas…</p><div class="sort-control"><label for="ordenar">Ordenar por</label><select id="ordenar"><option value="az">Nome: A–Z</option><option value="za">Nome: Z–A</option></select></div></div>
       <div id="estado-vazio" class="empty-state" hidden><h2>Nenhum artista publicado</h2><p>Os perfis serão exibidos aqui após a publicação pela equipe.</p></div>
       <div id="sem-resultados" class="empty-state" hidden><h2>Nenhum resultado encontrado</h2><p>Altere os termos da busca ou selecione outra área de atuação.</p><button id="limpar-busca" class="secondary" type="button">Limpar filtros</button></div>

@@ -184,27 +184,102 @@ button[aria-pressed=true] { background: var(--blue); color: #fff; }
 }
 @media(prefers-reduced-motion:reduce) { html { scroll-behavior: auto; } }
 
-/* Abertura editorial com acesso direto às especialidades. */
-.catalog-intro { display: grid; grid-template-columns: 1.2fr 1fr; gap: 72px; align-items: center; padding-top: 56px; padding-bottom: 56px; }
-.intro-copy { padding-block: 12px; }
-.catalog-intro .intro-label { display: inline-block; padding-left: 13px; border-left: 3px solid var(--flag-green); color: var(--green); font-size: .68rem; font-weight: 700; letter-spacing: .14em; margin-bottom: 22px; }
-.catalog-intro h1 { font-size: clamp(2.1rem, 3.4vw, 3.2rem); line-height: 1.13; letter-spacing: -.04em; margin-bottom: 22px; }
-.catalog-intro .intro-description { font-size: .95rem; max-width: 435px; line-height: 1.85; }
-.intro-actions { display: flex; align-items: center; gap: 26px; flex-wrap: wrap; margin-top: 28px; }
-.intro-actions > a:last-child { font-size: .82rem; font-weight: 550; color: var(--blue); }
-.area-spotlight { position: relative; background: var(--blue); color: #fff; border-radius: 10px; overflow: hidden; padding: 30px 32px 24px; }
-.area-spotlight:before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, var(--flag-green) 0 65%, var(--yellow) 65%); }
-.spotlight-label { color: #d8e4ff; letter-spacing: .12em; font-size: .62rem; font-weight: 650; }
-.spotlight-heading h2 { font-size: 1.5rem; font-weight: 600; line-height: 1.3; margin: 12px 0 22px; }
-.spotlight-links { border-top: 1px solid #ffffff35; }
-.spotlight-links a { display: flex; align-items: center; gap: 16px; padding: 14px 0; border-bottom: 1px solid #ffffff35; text-decoration: none; font-size: .88rem; font-weight: 550; }
-.spotlight-links a:hover { color: var(--yellow); }
-.area-number { font-size: .65rem; color: #b4c8ef; font-variant-numeric: tabular-nums; }
-.spotlight-links .arrow { margin-left: auto; width: 12px; height: 12px; }
-.all-areas { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; font-size: .75rem; color: #fff; text-decoration: none; }
-.all-areas:hover { text-decoration: underline; }
-.catalog-heading { border-top: 1px solid var(--line); padding-top: 30px; margin-bottom: 22px; }
-.catalog-heading h2 { font-size: 1.4rem; color: var(--blue); margin-bottom: 8px; }
-.catalog-heading p { font-size: .83rem; color: var(--muted); margin-bottom: 0; }
-@media(max-width:850px) { .catalog-intro { gap: 32px; } .area-spotlight { padding: 28px 24px 22px; } .intro-actions { gap: 18px; } }
-@media(max-width:650px) { .catalog-intro { grid-template-columns: 1fr; gap: 28px; padding-top: 30px; padding-bottom: 32px; } .catalog-intro h1 { font-size: 2.3rem; } .catalog-intro .intro-description { font-size: .87rem; } .catalog-intro .intro-label { margin-bottom: 16px; } .intro-copy { padding-block: 0; } .intro-actions { margin-top: 22px; } .area-spotlight { padding: 24px 24px 20px; } .spotlight-heading h2 { font-size: 1.3rem; margin-bottom: 16px; } .spotlight-heading h2 br { display: none; } .spotlight-links a { padding: 11px 0; } .catalog-heading { padding-top: 24px; } }
+/* Catálogo visual, organizado como um perfil e suas publicações. */
+.public-site { color: #17212d; }
+.social-main, .social-topbar .wrap { max-width: 1040px; margin-inline: auto; }
+.social-topbar { border-top: 0; position: sticky; top: 0; z-index: 5; background: #fffffffa; }
+.social-topbar .header-layout { min-height: 72px; }
+.social-topbar .site-name { border: 0; padding: 0; font-size: 1.4rem; letter-spacing: -.04em; font-weight: 750; }
+.account-profile { display: grid; grid-template-columns: 210px 1fr; gap: 44px; align-items: center; padding-top: 40px; padding-bottom: 32px; }
+.profile-logo-ring { width: 164px; height: 164px; padding: 5px; border-radius: 50%; background: conic-gradient(#009739 0deg 125deg, #ffdf00 125deg 245deg, #002776 245deg 360deg); justify-self: center; }
+.account-profile .culture-logo { min-height: 0; width: 100%; height: 100%; border: 4px solid #fff; background: #f3f6fa; border-radius: 50%; padding: 20px; color: var(--blue); text-align: center; }
+.account-profile .culture-logo span { font-size: .95rem; line-height: 1.45; }
+.account-title { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; margin-bottom: 22px; }
+.account-title h1 { font-size: 1.65rem; font-weight: 500; letter-spacing: -.035em; margin: 0; }
+.account-explore { background: var(--blue); color: #fff; border-radius: 6px; padding: 7px 16px; text-decoration: none; font-size: .77rem; font-weight: 600; }
+.account-stats { display: flex; gap: 32px; font-size: .9rem; margin-bottom: 18px; }
+.account-stats strong { font-weight: 750; margin-right: 4px; }
+.account-name { font-size: .86rem; font-weight: 650; margin-bottom: 3px; }
+.account-bio { font-size: .85rem; line-height: 1.65; margin-bottom: 3px; }
+.account-about { font-size: .8rem; color: var(--blue); text-decoration: none; font-weight: 550; }
+.public-site .catalog-section { padding-bottom: 40px; }
+.public-site .search-box { border-color: #e1e6ec; background: #f6f7f9; border-radius: 9px; max-width: 520px; margin: 0 0 20px auto; }
+.public-site .search-box input { font-size: .8rem; padding: 8px 0 !important; }
+.public-site .category-filters { flex-wrap: nowrap; overflow-x: auto; padding: 4px 0 22px; gap: 16px; margin: 0; scrollbar-width: thin; }
+.public-site .category-filters button { position: relative; flex: 0 0 88px; white-space: normal; padding: 78px 0 0; background: transparent; color: #25364b; border: 0; border-radius: 0; font-size: .68rem; line-height: 1.4; font-weight: 500; }
+.public-site .category-filters button:before { content: ''; position: absolute; top: 0; left: 9px; width: 68px; height: 68px; border: 2px solid #d8e0e9; border-radius: 50%; background: #f2f6fc; }
+.public-site .category-icon { position: absolute; top: 21px; left: 30px; width: 26px; height: 26px; fill: none; stroke: var(--blue); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.public-site .category-filters button[aria-pressed=true]:before { border-color: var(--flag-green); outline: 2px solid #ffdf00; outline-offset: 2px; }
+.view-tabs { display: flex; justify-content: center; gap: 40px; border-top: 1px solid var(--line); margin-top: 8px; }
+.view-tabs .view-tab { background: transparent; color: #6d7887; border: 0; border-top: 2px solid transparent; border-radius: 0; margin-top: -1px; padding: 16px 6px 12px; font-size: .72rem; font-weight: 650; text-transform: uppercase; letter-spacing: .06em; gap: 8px; }
+.view-tabs .view-tab[aria-pressed=true] { border-top-color: var(--blue); color: var(--blue); }
+.view-tab svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+.public-site .results-toolbar { border: 0; padding-top: 4px; font-size: .73rem; }
+.public-site .empty-state { border: 0; padding: 52px 20px; margin-top: 10px; }
+.public-site .empty-state h2 { font-size: 1.3rem; font-weight: 600; }
+.public-site .empty-state p { max-width: 380px; margin-inline: auto; font-size: .82rem; }
+.public-site .artist-grid { gap: 18px; margin-top: 18px; }
+.public-site .artist-card { border-color: #e1e5eb; border-radius: 5px; }
+.post-header { display: flex; align-items: center; gap: 10px; padding: 11px 13px; }
+.post-header > div:last-child { min-width: 0; }
+.post-header strong { display: block; font-size: .76rem; font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.post-header span:not(.artist-initials) { display: block; font-size: .65rem; color: #627184; }
+.post-avatar { flex-shrink: 0; width: 32px; height: 32px; border: 1px solid #e1e5eb; border-radius: 50%; background: #eef3fb; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.post-avatar .artist-initials { font-size: .7rem; color: var(--blue); }
+.post-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.public-site .artist-cover { aspect-ratio: 1; }
+.public-site .artist-cover .artist-initials { font-size: 4.4rem; }
+.public-site .artist-card-body { padding: 14px; }
+.public-site .artist-card h3 { font-size: .85rem; margin: 8px 0; letter-spacing: 0; }
+.public-site .artist-card p { font-size: .76rem; }
+.public-site .artist-summary { min-height: 0; -webkit-line-clamp: 2; margin-bottom: 8px; }
+.public-site .tag { font-size: .6rem; padding: 2px 6px; }
+.public-site .artist-card button { padding: 8px 0 0; border: 0; border-top: 1px solid #e5e9ef; border-radius: 0; font-size: .7rem; margin-top: 8px; }
+.public-site .artist-grid.is-feed { grid-template-columns: minmax(0, 540px); justify-content: center; gap: 26px; }
+.public-site .is-feed .artist-card-body { padding: 18px; }
+.public-site .is-feed .post-header strong, .public-site .is-feed .artist-card h3 { font-size: .9rem; }
+.public-site .is-feed .artist-card p { font-size: .82rem; }
+.public-site .is-feed .post-avatar { width: 38px; height: 38px; }
+.public-site .profile-cover { width: 130px; height: 130px; aspect-ratio: 1; border-radius: 50%; margin: 30px 32px 0; border: 4px solid #fff; outline: 2px solid var(--flag-green); }
+.public-site .profile-cover .artist-initials { font-size: 2.8rem; }
+.social-main .catalog-about { padding-block: 24px; }
+.social-main .catalog-about p { font-size: .78rem; }
+.social-main .catalog-about h2 { font-size: .9rem; }
+@media(max-width:650px) {
+  .social-topbar .header-layout { min-height: 62px; flex-wrap: nowrap; padding-block: 0; }
+  .social-topbar .site-name { font-size: 1.15rem; }
+  .social-topbar .nav-links { width: auto; border: 0; margin-left: auto; padding: 0; }
+  .social-topbar .nav-links > a:not(.nav-team) { display: none; }
+  .social-topbar .nav-team { font-size: .72rem; }
+  .account-profile { grid-template-columns: 90px minmax(0,1fr); gap: 18px; padding-top: 26px; padding-bottom: 24px; align-items: start; }
+  .profile-logo-ring { width: 90px; height: 90px; padding: 3px; margin-top: 6px; }
+  .account-profile .culture-logo { padding: 5px; border-width: 3px; }
+  .account-profile .culture-logo span { font-size: .62rem; }
+  .account-title { gap: 12px; margin-bottom: 16px; }
+  .account-title h1 { font-size: 1.25rem; }
+  .account-explore { font-size: .67rem; padding: 5px 10px; }
+  .account-stats { gap: 18px; font-size: .73rem; margin-bottom: 12px; }
+  .account-stats strong { display: block; font-size: .95rem; }
+  .account-name, .account-bio { font-size: .73rem; }
+  .account-about { font-size: .7rem; }
+  .public-site .search-box { max-width: none; margin-bottom: 18px; }
+  .public-site .category-filters { gap: 10px; margin-right: -8px; }
+  .public-site .category-filters button { flex-basis: 74px; padding-top: 68px; font-size: .63rem; }
+  .public-site .category-filters button:before { width: 58px; height: 58px; left: 7px; }
+  .public-site .category-icon { top: 18px; left: 24px; width: 24px; height: 24px; }
+  .public-site .artist-grid:not(.is-feed) { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
+  .public-site .artist-grid:not(.is-feed) .post-header { padding: 8px; gap: 6px; }
+  .public-site .artist-grid:not(.is-feed) .post-avatar { width: 24px; height: 24px; }
+  .public-site .artist-grid:not(.is-feed) .post-header strong { font-size: .65rem; }
+  .public-site .artist-grid:not(.is-feed) .post-header span:not(.artist-initials) { font-size: .55rem; }
+  .public-site .artist-grid:not(.is-feed) .artist-card-body { padding: 10px; }
+  .public-site .artist-grid:not(.is-feed) .artist-card h3 { font-size: .75rem; }
+  .public-site .artist-grid:not(.is-feed) .artist-card p { font-size: .68rem; }
+  .public-site .artist-grid:not(.is-feed) .artist-card button { font-size: .62rem; align-items: start; gap: 4px; }
+  .public-site .artist-grid:not(.is-feed) .artist-card button .arrow { width: 10px; height: 10px; }
+  .public-site .artist-cover .artist-initials { font-size: 2.8rem; }
+  .public-site .profile-cover { width: 100px; height: 100px; margin-left: 24px; }
+  .public-site .results-toolbar { flex-direction: row; align-items: center; gap: 8px; }
+  .public-site .sort-control { gap: 4px; }
+  .public-site .sort-control label { display: none; }
+}
