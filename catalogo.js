@@ -54,19 +54,19 @@
     const filtrados = artistas.filter(a => (!selecionada || (a.areas_atuacao || []).includes(selecionada)) && normalizar(`${a.nome_artistico} ${(a.areas_atuacao || []).join(' ')} ${a.perfil?.bairro || ''} ${a.perfil?.resumo || ''}`).includes(termo));
     filtrados.sort((a, b) => a.nome_artistico.localeCompare(b.nome_artistico, 'pt-BR') * ($('ordenar').value === 'za' ? -1 : 1));
     $('artistas').replaceChildren(); $('estado-vazio').hidden = artistas.length > 0; $('sem-resultados').hidden = !artistas.length || filtrados.length > 0;
-    $('mensagem').textContent = artistas.length ? `${filtrados.length} artista${filtrados.length !== 1 ? 's' : ''} para descobrir` : 'Novas histórias chegam em breve';
+    $('mensagem').textContent = artistas.length ? `${filtrados.length} artista${filtrados.length !== 1 ? 's' : ''} encontrado${filtrados.length !== 1 ? 's' : ''}` : '0 artistas';
     for (const [indice, a] of filtrados.slice(0, limite).entries()) {
       const card = document.createElement('article'); card.className = 'artist-card';
       const corpo = document.createElement('div'); corpo.className = 'artist-card-body';
       const areas = document.createElement('div'); tags({ areas_atuacao: a.areas_atuacao?.slice(0, 2) }, areas);
-      corpo.append(areas, texto('h3', a.nome_artistico), texto('p', a.perfil?.resumo || a.biografia || 'Conheça a trajetória e o trabalho deste artista.', 'artist-summary'), texto('p', [a.perfil?.cidade || 'Avaré', a.perfil?.bairro].filter(Boolean).join(' · '), 'artist-location'));
+      corpo.append(areas, texto('h3', a.nome_artistico), texto('p', a.perfil?.resumo || a.biografia || 'Consulte as informações disponíveis no perfil.', 'artist-summary'), texto('p', [a.perfil?.cidade || 'Avaré', a.perfil?.bairro].filter(Boolean).join(' · '), 'artist-location'));
       const b = texto('button', 'Conhecer artista'); const seta = document.createElement('span'); seta.className = 'arrow'; seta.setAttribute('aria-hidden', 'true'); b.append(seta); b.type = 'button'; b.setAttribute('aria-label', `Conhecer ${a.nome_artistico}`); b.addEventListener('click', () => abrirPerfil(a, indice, b));
       corpo.append(b); card.append(capa(a, indice, 'artist-cover'), corpo); $('artistas').append(card);
     }
     $('mais').hidden = filtrados.length <= limite;
   }
   async function carregar() {
-    $('tentar').hidden = true; $('busca').disabled = true; $('mensagem').classList.remove('error'); $('mensagem').textContent = 'Buscando talentos…';
+    $('tentar').hidden = true; $('busca').disabled = true; $('mensagem').classList.remove('error'); $('mensagem').textContent = 'Carregando artistas…';
     $('estado-vazio').hidden = true; $('sem-resultados').hidden = true; $('mais').hidden = true;
     try {
       if (!window.supabase || !window.MAPA_CONFIG) throw new Error('Biblioteca indisponível');

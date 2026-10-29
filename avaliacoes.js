@@ -45,7 +45,7 @@
     perfil = event.detail; versao++;
     const secao = $('avaliacoes-perfil'); if (!secao) return;
     secao.className = 'reviews-section';
-    secao.innerHTML = `<h3>A arte também se faz de encontros.</h3><p id="avaliacoes-resumo" class="hint" role="status">Carregando avaliações…</p><div id="avaliacoes-lista"></div>
+    secao.innerHTML = `<h3>Avaliações e comentários</h3><p id="avaliacoes-resumo" class="hint" role="status">Carregando avaliações…</p><div id="avaliacoes-lista"></div>
       <div id="avaliacao-area" hidden><h4>Conte como foi sua experiência</h4><p class="hint">Avaliações são públicas e passam pela aprovação da equipe. Cada pessoa pode avaliar uma vez por artista; um novo envio substitui o anterior e volta para revisão.</p>
       <p id="avaliacao-status" role="status" class="hint"></p>
       <form id="avaliacao-login" hidden><label for="avaliacao-email">Confirme seu e-mail para participar</label><input id="avaliacao-email" type="email" autocomplete="email" required maxlength="254" placeholder="seu@email.com"><p class="hint">Enviaremos um link de acesso. O e-mail será usado para autenticação e não aparecerá no comentário. Isso não dá acesso à edição do catálogo.</p><button type="submit">Receber link de acesso</button></form>

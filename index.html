@@ -3,49 +3,38 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
-  <meta name="description" content="Avaré tem arte em cada canto. Descubra artistas, conheça suas histórias e conecte-se à cultura da nossa cidade.">
-  <title>Mapa Cultural de Avaré — Arte em cada canto</title>
-  <link rel="stylesheet" href="styles.css?v=brasil-1">
+  <meta name="description" content="Catálogo de artistas e profissionais da cultura de Avaré. Consulte perfis, áreas de atuação, trabalhos e contatos.">
+  <title>Mapa Cultural de Avaré — Catálogo de artistas</title>
+  <link rel="stylesheet" href="styles.css?v=profissional-1">
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script defer src="config.js"></script><script defer src="avaliacoes.js"></script><script defer src="catalogo.js"></script>
 </head>
 <body class="public-site">
   <a class="skip-link" href="#catalogo">Pular para o catálogo</a>
-  <header class="site-header"><nav class="wrap topnav" aria-label="Navegação principal">
-    <a href="index.html" class="brand" aria-label="Mapa Cultural de Avaré, início"><span class="brand-mark" aria-hidden="true">a<span>·</span></span><span>mapa cultural<strong>AVARÉ</strong></span></a>
-    <div class="nav-links"><a href="#catalogo">Explorar artistas</a><a href="#sobre">O projeto</a><a class="nav-team" href="equipe.html">Área da equipe <span aria-hidden="true"><span class="arrow" aria-hidden="true"></span></span></a></div>
-  </nav></header>
+  <header class="site-header"><div class="wrap header-layout">
+    <!-- Substitua o conteúdo deste espaço pela imagem oficial quando ela for fornecida. -->
+    <div class="culture-logo" role="img" aria-label="Espaço reservado para a logo da Cultura"><span>Logo da Cultura</span><small>Espaço reservado</small></div>
+    <a href="index.html" class="site-name">Mapa Cultural<span>Avaré</span></a>
+    <nav class="nav-links" aria-label="Navegação principal"><a href="#catalogo">Artistas</a><a href="#sobre">Sobre</a><a class="nav-team" href="equipe.html">Área da equipe</a></nav>
+  </div></header>
   <main>
-    <section class="hero wrap" aria-labelledby="hero-title">
-      <div class="hero-copy"><p class="eyebrow"><span class="live-dot" aria-hidden="true"></span> Feito de gente. Feito em Avaré.</p>
-        <h1 id="hero-title">A cidade tem arte.<br><em>Vem descobrir.</em></h1>
-        <p class="hero-description">Histórias, vozes e talentos que fazem a nossa cultura acontecer. Encontre artistas e se conecte com quem cria por aqui.</p>
-        <a class="button" href="#catalogo">Explore o catálogo <span aria-hidden="true"><span class="arrow" aria-hidden="true"></span></span></a>
-        <div class="hero-note"><span class="small-star" aria-hidden="true">✳</span> A cultura local merece ser vista.</div>
-      </div>
-      <div class="culture-art" aria-hidden="true">
-        <div class="art-tile tile-sun"><span class="sun"></span><span class="art-caption">NOSSA TERRA<br>NOSSA ARTE</span></div>
-        <div class="art-tile tile-type"><span>a</span><small>de Avaré.<br>de artista.</small></div>
-        <div class="art-tile tile-music"><span class="music-lines"></span><span class="note">♪</span><small>O SOM DA<br>NOSSA GENTE</small></div>
-        <div class="art-tile tile-flower"><span class="flower">✳</span><small>CULTURA VIVA</small></div>
-        <div class="art-sticker">Tem talento<br>por aqui. <span class="arrow" aria-hidden="true"></span></div>
-      </div>
+    <section class="catalog-intro wrap" aria-labelledby="titulo-busca">
+      <h1 id="titulo-busca">Catálogo de artistas</h1>
+      <p>Consulte perfis, áreas de atuação, trabalhos e contatos dos profissionais da cultura.</p>
     </section>
-    <div class="culture-strip" aria-hidden="true"><div>MÚSICA <span>✳</span> ARTES VISUAIS <span>✳</span> TEATRO <span>✳</span> DANÇA <span>✳</span> LITERATURA <span>✳</span> ARTESANATO <span>✳</span> CULTURA POPULAR</div></div>
-    <section id="catalogo" class="wrap catalog-section" aria-labelledby="titulo-busca">
-      <div class="section-heading"><div><p class="eyebrow">Um encontro com a cultura local</p><h2 id="titulo-busca">Talento tem endereço.</h2></div><p>Encontre quem transforma<br>ideias em arte em Avaré.</p></div>
-      <div class="search-box"><label for="busca" class="sr-only">Buscar artista, área ou bairro</label><span aria-hidden="true">⌕</span><input id="busca" type="search" placeholder="Quem ou o que você quer descobrir?" disabled><span class="search-hint">Nome, área ou bairro</span></div>
+    <section id="catalogo" class="wrap catalog-section" aria-label="Consulta de artistas">
+      <div class="search-box"><label for="busca" class="sr-only">Buscar artista, área ou bairro</label><span aria-hidden="true">⌕</span><input id="busca" type="search" placeholder="Buscar por nome, área de atuação ou bairro" disabled></div>
       <div id="categorias" class="category-filters" role="group" aria-label="Filtrar por área cultural"></div>
-      <div class="results-toolbar"><p id="mensagem" role="status" aria-live="polite">Buscando talentos…</p><div class="sort-control"><label for="ordenar">Ordenar por</label><select id="ordenar"><option value="az">Nome: A–Z</option><option value="za">Nome: Z–A</option></select></div></div>
-      <div id="estado-vazio" class="empty-state" hidden><div class="empty-flower" aria-hidden="true">✳</div><p class="eyebrow">Esse encontro está só começando</p><h3>O próximo talento pode estar bem aqui.</h3><p>Estamos preparando o catálogo com carinho.<br>Em breve, este espaço vai ganhar nomes, histórias e muita arte.</p><a href="#sobre">Conheça o projeto <span aria-hidden="true"><span class="arrow" aria-hidden="true"></span></span></a></div>
-      <div id="sem-resultados" class="empty-state" hidden><div class="empty-flower" aria-hidden="true">⌕</div><h3>Vamos tentar outro caminho?</h3><p>Nenhum perfil corresponde à sua busca. Experimente outro nome ou área cultural.</p><button id="limpar-busca" class="secondary" type="button">Limpar filtros</button></div>
+      <div class="results-toolbar"><p id="mensagem" role="status" aria-live="polite">Carregando artistas…</p><div class="sort-control"><label for="ordenar">Ordenar por</label><select id="ordenar"><option value="az">Nome: A–Z</option><option value="za">Nome: Z–A</option></select></div></div>
+      <div id="estado-vazio" class="empty-state" hidden><h2>Nenhum artista publicado</h2><p>Os perfis serão exibidos aqui após a publicação pela equipe.</p></div>
+      <div id="sem-resultados" class="empty-state" hidden><h2>Nenhum resultado encontrado</h2><p>Altere os termos da busca ou selecione outra área de atuação.</p><button id="limpar-busca" class="secondary" type="button">Limpar filtros</button></div>
       <button id="tentar" class="secondary" type="button" hidden>Tentar novamente</button>
       <div id="artistas" class="grid artist-grid" aria-label="Artistas cadastrados"></div>
       <div class="load-more"><button id="mais" type="button" class="secondary" hidden>Ver mais artistas</button></div>
     </section>
-    <section id="sobre" class="about-section"><div class="wrap about-grid"><div><p class="eyebrow">Pertencer também é conhecer</p><h2>Quem faz cultura<br><em>faz a cidade.</em></h2></div><div><p>O Mapa Cultural de Avaré aproxima pessoas da produção cultural da cidade. Um lugar para descobrir artistas, valorizar trajetórias e criar novas conexões.</p><p>A cada cadastro, uma história ganha espaço. Explore, conheça e fortaleça a arte que acontece perto de você.</p><a href="#catalogo">Descubra a cultura de Avaré <span aria-hidden="true"><span class="arrow" aria-hidden="true"></span></span></a></div></div></section>
+    <section id="sobre" class="catalog-about"><div class="wrap"><h2>Sobre o catálogo</h2><p>Este catálogo reúne informações profissionais fornecidas pelos artistas e organizadas pela equipe de Cultura. Os perfis publicados podem incluir biografia, trabalhos, contatos e avaliações do público.</p></div></section>
   </main>
-  <footer class="site-footer"><div class="wrap footer-inner"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">a<span>·</span></span><span>mapa cultural<strong>AVARÉ</strong></span></a><p>Arte em cada canto.<br>Gente no centro de tudo.</p><a href="equipe.html">Acesso da equipe <span class="arrow" aria-hidden="true"></span></a></div></footer>
+  <footer class="site-footer"><div class="footer-colors" aria-hidden="true"></div><div class="wrap footer-content"><p class="city-motto">A cultura não para!</p><div class="footer-bottom"><span>Mapa Cultural</span><a href="equipe.html">Acesso da equipe</a></div></div></footer>
   <dialog id="perfil-dialog" aria-labelledby="perfil-nome"><button id="fechar-perfil" class="dialog-close secondary" aria-label="Fechar perfil" type="button">✕</button><div id="perfil-conteudo"></div></dialog>
 </body>
 </html>
