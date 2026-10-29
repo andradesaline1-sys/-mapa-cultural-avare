@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow"><title>Área da equipe · Mapa Cultural de Avaré</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="config.js"></script><script defer src="equipe.js"></script>
+</head>
+<body>
+  <header><div class="wrap"><nav aria-label="Navegação principal"><a href="index.html">← Ver catálogo</a><button id="sair" class="secondary" hidden>Sair</button></nav><h1>Área da equipe</h1><p>Organize os cadastros e escolha o que aparece no catálogo.</p></div></header>
+  <main class="wrap">
+    <p id="status" class="status" role="status" aria-live="polite">Verificando acesso…</p>
+    <section id="login" class="panel auth" hidden>
+      <h2>Entrar</h2><p>Use a conta liberada pela coordenação.</p>
+      <form id="form-login">
+        <label for="email">E-mail</label><input id="email" type="email" autocomplete="username" required maxlength="254">
+        <label for="senha">Senha</label><input id="senha" type="password" autocomplete="current-password" required>
+        <div class="actions"><button id="entrar" type="submit">Entrar</button><button id="recuperar" class="secondary" type="button">Esqueci minha senha</button></div>
+      </form>
+    </section>
+    <section id="nova-senha" class="panel auth" hidden>
+      <h2>Definir senha</h2>
+      <form id="form-senha"><label for="senha-nova">Nova senha (mínimo de 12 caracteres)</label><input id="senha-nova" type="password" autocomplete="new-password" minlength="12" required>
+        <label for="senha-confirmacao">Repita a nova senha</label><input id="senha-confirmacao" type="password" autocomplete="new-password" minlength="12" required>
+        <div class="actions"><button type="submit">Salvar senha</button></div>
+      </form>
+    </section>
+    <section id="painel" hidden>
+      <p id="conta" class="hint"></p><div class="admin-layout">
+        <section class="panel"><h2 id="titulo-editor">Novo artista</h2>
+          <form id="form-artista">
+            <label for="nome">Nome artístico *</label><input id="nome" required maxlength="160">
+            <label for="biografia">Biografia</label><textarea id="biografia" maxlength="5000"></textarea>
+            <label for="areas">Áreas de atuação</label><input id="areas" maxlength="1000" aria-describedby="ajuda-areas">
+            <p id="ajuda-areas" class="hint">Separe por vírgulas. Ex.: Música, Teatro, Artes visuais.</p>
+            <label><input id="publicado" type="checkbox">Publicar no catálogo</label>
+            <p class="hint">Desmarcado: só a equipe vê o cadastro. Publique apenas informações autorizadas pelo artista. Não inclua documentos ou dados privados.</p>
+            <div class="actions"><button id="salvar" type="submit">Salvar cadastro</button><button id="novo" class="secondary" type="button">Limpar / novo</button></div>
+          </form>
+        </section>
+        <section class="panel"><h2>Cadastros</h2><label for="filtro">Buscar na equipe</label><input id="filtro" type="search" placeholder="Nome ou área cultural">
+          <p id="contagem" role="status"></p><div id="lista"></div><button id="recarregar" class="secondary" type="button">Atualizar lista</button>
+        </section>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
