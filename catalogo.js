@@ -83,6 +83,12 @@
       $('artistas').replaceChildren(); $('mensagem').classList.add('error'); $('mensagem').textContent = 'Não foi possível carregar o catálogo. Verifique a conexão e tente novamente.'; $('tentar').hidden = false;
     }
   }
+  for (const link of document.querySelectorAll('[data-area]')) {
+    link.addEventListener('click', () => {
+      const botao = [...$('categorias').children].find(b => b.textContent === (link.dataset.area || 'Todas as áreas'));
+      if (botao) { $('busca').value = ''; botao.click(); }
+    });
+  }
   $('busca').addEventListener('input', () => { limite = 12; desenhar(); }); $('ordenar').addEventListener('change', desenhar);
   $('limpar-busca').addEventListener('click', () => { $('busca').value = ''; selecionada = ''; limite = 12; categorias(); desenhar(); $('busca').focus(); });
   $('mais').addEventListener('click', () => { limite += 12; desenhar(); }); $('tentar').addEventListener('click', carregar);
