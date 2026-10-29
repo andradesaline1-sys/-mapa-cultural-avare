@@ -16,7 +16,7 @@
     : 'Não foi possível concluir a operação. Verifique a conexão e suas permissões e tente novamente.';
 
   function limpar() {
-    editando = null; $('form-artista').reset(); $('titulo-editor').textContent = 'Novo artista'; fotoArquivo = null; if (fotoObjeto) URL.revokeObjectURL(fotoObjeto); fotoObjeto = null; mostrarFoto(''); formularioAlterado = false;
+    editando = null; $('form-artista').reset(); window.MAPA_AREA_SELECTOR.setValues([]); $('titulo-editor').textContent = 'Novo artista'; fotoArquivo = null; if (fotoObjeto) URL.revokeObjectURL(fotoObjeto); fotoObjeto = null; mostrarFoto(''); formularioAlterado = false;
   }
   function mudou() {
     return formularioAlterado || fotoArquivo !== null;
@@ -36,7 +36,7 @@
       editar.addEventListener('click', () => {
         if (ocupado || !podeDescartar()) return;
         editando = a.id; $('nome').value = a.nome_artistico; $('biografia').value = a.biografia;
-        $('areas').value = a.areas_atuacao.join(', '); $('publicado').checked = a.publicado;
+        window.MAPA_AREA_SELECTOR.setValues(a.areas_atuacao); $('publicado').checked = a.publicado;
         preencherPerfil(a.perfil); fotoArquivo = null; $('foto').value = ''; formularioAlterado = false; $('titulo-editor').textContent = 'Editar artista'; $('nome').focus();
       });
       item.append(titulo, descricao, editar); $('lista').appendChild(item);
@@ -122,7 +122,7 @@
     event.preventDefault(); if (ocupado || !usuario) return;
     const nome = $('nome').value.trim();
     if (!nome) { status('Informe o nome artístico.', true); $('nome').focus(); return; }
-    const areas = [...new Set($('areas').value.split(',').map(a => a.trim()).filter(Boolean))];
+    const areas = window.MAPA_AREA_SELECTOR.getValues();
     if (areas.length > 20 || areas.some(a => a.length > 80)) { status('Use até 20 áreas, com até 80 caracteres em cada uma.', true); return; }
     const perfil = {};
     if (perfilDisponivel) {

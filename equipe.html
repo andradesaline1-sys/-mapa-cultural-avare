@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow"><title>Área da equipe · Mapa Cultural de Avaré</title>
-  <link rel="stylesheet" href="styles.css?v=social-1">
+  <link rel="stylesheet" href="styles.css?v=identidade-1">
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script defer src="config.js"></script><script defer src="equipe.js"></script><script defer src="equipe-avaliacoes.js"></script>
+  <script defer src="config.js"></script><script defer src="categorias.js"></script><script defer src="seletor-categorias.js"></script><script defer src="equipe.js"></script><script defer src="equipe-avaliacoes.js"></script>
 </head>
 <body class="admin-page">
   <header class="admin-header"><div class="wrap"><nav aria-label="Navegação principal"><a href="index.html">← Ver catálogo</a><button id="sair" class="secondary" hidden>Sair</button></nav><h1>Área da equipe</h1><p>Organize os cadastros e escolha o que aparece no catálogo.</p></div></header>
@@ -32,8 +32,16 @@
           <form id="form-artista">
             <fieldset class="form-section"><legend><span>1</span> Apresentação</legend><label for="nome">Nome artístico *</label><input id="nome" required maxlength="160">
             <label for="biografia">Biografia</label><textarea id="biografia" maxlength="5000"></textarea>
-            <label for="areas">Áreas de atuação</label><input id="areas" maxlength="1000" aria-describedby="ajuda-areas">
-            <p id="ajuda-areas" class="hint">Separe por vírgulas. Ex.: Música, Teatro, Artes visuais.</p>
+            <div id="seletor-categorias" class="category-selector">
+              <h3>Áreas e funções do artista</h3><p id="ajuda-areas" class="hint">Selecione uma ou mais opções. O mesmo perfil pode ter até 20 áreas e funções.</p>
+              <input id="areas" type="hidden">
+              <div id="categorias-selecionadas" class="selected-categories" aria-label="Categorias selecionadas"></div>
+              <p id="categorias-contagem" class="hint" role="status"></p>
+              <label for="busca-categorias">Buscar categoria ou atividade</label><input id="busca-categorias" type="search" placeholder="Ex.: fotografia, cantor, circo, audiovisual">
+              <label for="grupo-categorias">Tipo de opção</label><select id="grupo-categorias"><option value="">Todas as opções</option></select>
+              <p id="categorias-resultados" class="hint" role="status"></p><div id="opcoes-categorias" class="category-options" role="group" aria-label="Opções de categorias para o artista" aria-describedby="ajuda-areas"></div>
+              <details class="custom-category"><summary>Não encontrou a atividade?</summary><label for="categoria-personalizada">Adicionar outra categoria</label><input id="categoria-personalizada" maxlength="80" placeholder="Nome da atividade"><button id="adicionar-categoria" type="button" class="secondary">Adicionar ao perfil</button></details>
+            </div>
             </fieldset>
             <div id="perfil-aviso" class="hint" hidden>O formulário básico está disponível. A coordenação precisa ativar os campos completos para liberar foto, contatos e portfólio.</div>
             <fieldset id="campos-perfil" class="form-section"><legend><span>2</span> Perfil completo</legend>

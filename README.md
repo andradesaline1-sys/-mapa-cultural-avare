@@ -78,3 +78,8 @@ NODE_PATH=/tmp/avare-test-tools/node_modules node tests/navegador.cjs
 ```
 
 O teste de navegador usa `/usr/bin/chromium` no ambiente de desenvolvimento, faz uma consulta pública real ao catálogo vazio e depois usa dados simulados exclusivamente no navegador local. Não cria contas nem envia e-mails. As capturas de revisão são salvas em `/tmp/avare-novo-desktop.png` e `/tmp/avare-novo-mobile.png`. Não execute o teste de catálogo vazio após começar a publicar artistas sem adaptar essa expectativa.
+
+
+## Seleção de categorias
+
+O cadastro agora aceita múltipla escolha com busca e filtro por tipo. As opções vêm das taxonomias públicas do Mapas Culturais, com 759 valores únicos e suporte a atividades personalizadas. Veja [a fonte e os critérios](docs/categorias.md). Um mesmo artista pode ter até 20 categorias. A estrutura do banco foi preservada; não há SQL adicional para esta mudança.

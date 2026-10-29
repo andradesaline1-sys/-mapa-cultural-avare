@@ -4,6 +4,8 @@
   const normalizar = texto => String(texto || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   let artistas = [], selecionada = '', limite = 12, ultimoBotao;
   let visualizacao = 'grade';
+  const categoriasDados = new Map();
+  for (const grupo of window.MAPA_CATEGORIAS || []) for (const opcao of grupo.opcoes) if (!categoriasDados.has(normalizar(opcao.valor))) categoriasDados.set(normalizar(opcao.valor), { ...opcao, grupo: grupo.nome });
   const padrao = ['Música', 'Artes visuais', 'Teatro', 'Dança', 'Literatura', 'Artesanato', 'Cultura popular'];
   const texto = (tag, valor, classe) => { const e = document.createElement(tag); e.textContent = valor; if (classe) e.className = classe; return e; };
   const urlSegura = valor => { try { const u = new URL(valor); return u.protocol === 'https:' && !u.username && !u.password ? u.href : null; } catch { return null; } };
@@ -16,15 +18,23 @@
     return e;
   }
   function tags(a, pai) { for (const nome of a.areas_atuacao || []) pai.append(texto('span', nome, 'tag')); }
+  function listaCategorias() {
+    const termo = normalizar($('categoria-pesquisa').value);
+    const select = $('categoria-filtro'); select.replaceChildren();
+    const todas = texto('option', 'Todas as categorias'); todas.value = ''; select.append(todas);
+    const grupos = new Map();
+    for (const o of [...categoriasDados.values()].sort((a, b) => a.rotulo.localeCompare(b.rotulo, 'pt-BR'))) {
+      if (termo && !normalizar(o.rotulo + ' ' + o.valor).includes(termo) && normalizar(o.valor) !== normalizar(selecionada)) continue;
+      if (!grupos.has(o.grupo)) { const g = document.createElement('optgroup'); g.label = o.grupo; grupos.set(o.grupo, g); select.append(g); }
+      const option = texto('option', o.rotulo); option.value = o.valor; option.selected = normalizar(o.valor) === normalizar(selecionada); grupos.get(o.grupo).append(option);
+    }
+    select.value = [...select.options].find(o => normalizar(o.value) === normalizar(selecionada))?.value || '';
+  }
   function categorias() {
-    const nomes = [...new Set([...padrao, ...artistas.flatMap(a => a.areas_atuacao || [])])];
     $('categorias').replaceChildren();
-    for (const nome of ['', ...nomes]) {
-      const b = texto('button', nome || 'Todas as áreas'); b.type = 'button'; b.setAttribute('aria-pressed', String(nome === selecionada));
-      const simbolos = { 'Música': 'musica', 'Artes visuais': 'artes-visuais', 'Teatro': 'teatro', 'Dança': 'danca', 'Literatura': 'literatura', 'Artesanato': 'artesanato', 'Cultura popular': 'cultura-popular' };
-      const icone = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); icone.classList.add('category-icon'); icone.setAttribute('aria-hidden', 'true');
-      const uso = document.createElementNS('http://www.w3.org/2000/svg', 'use'); uso.setAttribute('href', 'assets/areas.svg#' + (simbolos[nome] || 'todas')); icone.append(uso); b.append(icone);
-      b.addEventListener('click', () => { selecionada = nome; limite = 12; categorias(); desenhar(); [...$('categorias').children].find(e => e.textContent === (nome || 'Todas as áreas'))?.focus(); });
+    for (const nome of ['', ...padrao]) {
+      const b = texto('button', nome || 'Todas as áreas'); b.type = 'button'; b.setAttribute('aria-pressed', String(normalizar(nome) === normalizar(selecionada)));
+      b.addEventListener('click', () => { selecionada = nome; limite = 12; listaCategorias(); categorias(); desenhar(); [...$('categorias').children].find(e => e.textContent === (nome || 'Todas as áreas'))?.focus(); });
       $('categorias').append(b);
     }
   }
@@ -55,9 +65,9 @@
   }
   function desenhar() {
     const termo = normalizar($('busca').value.trim());
-    const filtrados = artistas.filter(a => (!selecionada || (a.areas_atuacao || []).includes(selecionada)) && normalizar(`${a.nome_artistico} ${(a.areas_atuacao || []).join(' ')} ${a.perfil?.bairro || ''} ${a.perfil?.resumo || ''}`).includes(termo));
+    const filtrados = artistas.filter(a => (!selecionada || (a.areas_atuacao || []).some(v => normalizar(v) === normalizar(selecionada))) && normalizar(`${a.nome_artistico} ${(a.areas_atuacao || []).join(' ')} ${a.perfil?.bairro || ''} ${a.perfil?.resumo || ''}`).includes(termo));
     filtrados.sort((a, b) => a.nome_artistico.localeCompare(b.nome_artistico, 'pt-BR') * ($('ordenar').value === 'za' ? -1 : 1));
-    $('artistas').classList.toggle('is-feed', visualizacao === 'feed');
+    $('artistas').classList.toggle('is-list', visualizacao === 'lista');
     $('artistas').replaceChildren(); $('estado-vazio').hidden = artistas.length > 0; $('sem-resultados').hidden = !artistas.length || filtrados.length > 0;
     $('mensagem').textContent = artistas.length ? `${filtrados.length} artista${filtrados.length !== 1 ? 's' : ''} encontrado${filtrados.length !== 1 ? 's' : ''}` : '0 artistas';
     for (const [indice, a] of filtrados.slice(0, limite).entries()) {
@@ -66,10 +76,7 @@
       const areas = document.createElement('div'); tags({ areas_atuacao: a.areas_atuacao?.slice(0, 2) }, areas);
       corpo.append(areas, texto('h3', a.nome_artistico), texto('p', a.perfil?.resumo || a.biografia || 'Consulte as informações disponíveis no perfil.', 'artist-summary'), texto('p', [a.perfil?.cidade || 'Avaré', a.perfil?.bairro].filter(Boolean).join(' · '), 'artist-location'));
       const b = texto('button', 'Ver perfil e comentários'); const seta = document.createElement('span'); seta.className = 'arrow'; seta.setAttribute('aria-hidden', 'true'); b.append(seta); b.type = 'button'; b.setAttribute('aria-label', `Conhecer ${a.nome_artistico}`); b.addEventListener('click', () => abrirPerfil(a, indice, b));
-      const cabecalho = document.createElement('div'); cabecalho.className = 'post-header';
-      const identidade = document.createElement('div'); identidade.append(texto('strong', a.nome_artistico), texto('span', a.areas_atuacao?.[0] || 'Artista'));
-      cabecalho.append(capa(a, indice, 'post-avatar'), identidade);
-      corpo.append(b); card.append(cabecalho, capa(a, indice, 'artist-cover'), corpo); $('artistas').append(card);
+      corpo.append(b); card.append(capa(a, indice, 'artist-cover'), corpo); $('artistas').append(card);
     }
     $('mais').hidden = filtrados.length <= limite;
   }
@@ -84,23 +91,27 @@
       if (r.error && ['42703', 'PGRST204', '42501'].includes(r.error.code)) r = await banco.from(window.MAPA_CONFIG.table).select('nome_artistico,biografia,areas_atuacao').eq('publicado', true).order('nome_artistico');
       if (r.error && ['PGRST205', '42P01'].includes(r.error.code)) r = await banco.from('artistas_publicos').select('nome_artistico,biografia,areas_atuacao');
       if (r.error) throw r.error;
-      artistas = r.data || []; $('total-artistas').textContent = artistas.length; $('total-areas').textContent = new Set([...padrao, ...artistas.flatMap(a => a.areas_atuacao || [])]).size; $('busca').disabled = false; categorias(); desenhar();
+      artistas = r.data || [];
+      for (const nome of artistas.flatMap(a => a.areas_atuacao || [])) if (!categoriasDados.has(normalizar(nome))) categoriasDados.set(normalizar(nome), { valor: nome, rotulo: nome, grupo: 'Categorias complementares' });
+      $('total-artistas').textContent = artistas.length; $('total-areas').textContent = categoriasDados.size; $('busca').disabled = false; listaCategorias(); categorias(); desenhar();
       const id = new URL(location.href).searchParams.get('artista'); const escolhido = artistas.find(a => a.id === id);
       if (escolhido) abrirPerfil(escolhido, artistas.indexOf(escolhido));
     } catch {
       $('artistas').replaceChildren(); $('mensagem').classList.add('error'); $('mensagem').textContent = 'Não foi possível carregar o catálogo. Verifique a conexão e tente novamente.'; $('tentar').hidden = false;
     }
   }
-  for (const [id, valor] of [['visao-grade', 'grade'], ['visao-feed', 'feed']]) {
+  for (const [id, valor] of [['visao-grade', 'grade'], ['visao-feed', 'lista']]) {
     $(id).addEventListener('click', () => {
       visualizacao = valor;
       $('visao-grade').setAttribute('aria-pressed', String(valor === 'grade'));
-      $('visao-feed').setAttribute('aria-pressed', String(valor === 'feed'));
+      $('visao-feed').setAttribute('aria-pressed', String(valor === 'lista'));
       desenhar();
     });
   }
+  $('categoria-pesquisa').addEventListener('input', listaCategorias);
+  $('categoria-filtro').addEventListener('change', () => { selecionada = $('categoria-filtro').value; limite = 12; categorias(); desenhar(); });
   $('busca').addEventListener('input', () => { limite = 12; desenhar(); }); $('ordenar').addEventListener('change', desenhar);
-  $('limpar-busca').addEventListener('click', () => { $('busca').value = ''; selecionada = ''; limite = 12; categorias(); desenhar(); $('busca').focus(); });
+  $('limpar-busca').addEventListener('click', () => { $('busca').value = ''; selecionada = ''; limite = 12; $('categoria-pesquisa').value = ''; listaCategorias(); categorias(); desenhar(); $('busca').focus(); });
   $('mais').addEventListener('click', () => { limite += 12; desenhar(); }); $('tentar').addEventListener('click', carregar);
   $('fechar-perfil').addEventListener('click', () => $('perfil-dialog').close());
   $('perfil-dialog').addEventListener('click', e => { if (e.target === $('perfil-dialog') && (e.clientX < e.target.getBoundingClientRect().left || e.clientX > e.target.getBoundingClientRect().right || e.clientY < e.target.getBoundingClientRect().top || e.clientY > e.target.getBoundingClientRect().bottom)) e.target.close(); });
