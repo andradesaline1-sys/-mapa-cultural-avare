@@ -93,13 +93,14 @@
       if (r.error) throw r.error;
       artistas = r.data || [];
       for (const nome of artistas.flatMap(a => a.areas_atuacao || [])) if (!categoriasDados.has(normalizar(nome))) categoriasDados.set(normalizar(nome), { valor: nome, rotulo: nome, grupo: 'Categorias complementares' });
-      $('total-artistas').textContent = artistas.length; $('total-areas').textContent = categoriasDados.size; $('busca').disabled = false; listaCategorias(); categorias(); desenhar();
+      $('total-artistas').textContent = artistas.length; document.dispatchEvent(new CustomEvent('catalogocarregado', { detail: { artistas } })); $('busca').disabled = false; listaCategorias(); categorias(); desenhar();
       const id = new URL(location.href).searchParams.get('artista'); const escolhido = artistas.find(a => a.id === id);
       if (escolhido) abrirPerfil(escolhido, artistas.indexOf(escolhido));
     } catch {
-      $('artistas').replaceChildren(); $('mensagem').classList.add('error'); $('mensagem').textContent = 'Não foi possível carregar o catálogo. Verifique a conexão e tente novamente.'; $('tentar').hidden = false;
+      document.dispatchEvent(new Event('catalogofalhou')); $('artistas').replaceChildren(); $('mensagem').classList.add('error'); $('mensagem').textContent = 'Não foi possível carregar o catálogo. Verifique a conexão e tente novamente.'; $('tentar').hidden = false;
     }
   }
+  document.addEventListener('abrirartista', event => { const a = artistas.find(a => a.id === event.detail.id); if (a) abrirPerfil(a, artistas.indexOf(a), event.detail.botao); });
   for (const [id, valor] of [['visao-grade', 'grade'], ['visao-feed', 'lista']]) {
     $(id).addEventListener('click', () => {
       visualizacao = valor;

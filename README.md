@@ -83,3 +83,10 @@ O teste de navegador usa `/usr/bin/chromium` no ambiente de desenvolvimento, faz
 ## Seleção de categorias
 
 O cadastro agora aceita múltipla escolha com busca e filtro por tipo. As opções vêm das taxonomias públicas do Mapas Culturais, com 759 valores únicos e suporte a atividades personalizadas. Veja [a fonte e os critérios](docs/categorias.md). Um mesmo artista pode ter até 20 categorias. A estrutura do banco foi preservada; não há SQL adicional para esta mudança.
+
+
+## Painel de artistas na página principal
+
+O painel alterna a cada seis segundos entre artistas publicados com foto HTTPS válida. A ordem é embaralhada, sem repetição imediata na passagem para um novo ciclo. O visitante pode avançar, voltar, pausar e abrir o perfil. A alternância para durante a interação, quando outra aba está ativa ou quando o perfil está aberto; a preferência por movimento reduzido inicia o painel pausado.
+
+As estrelas e a média vêm de `avare_notas_publicas`, que considera exclusivamente avaliações aprovadas de artistas publicados. Sem avaliações, o painel informa isso; uma falha de consulta é indicada separadamente. Não há notas ou fotos fictícias. Fotos que não carregam são retiradas da sequência. Artistas sem foto continuam acessíveis no catálogo normal. Não é necessário novo SQL.

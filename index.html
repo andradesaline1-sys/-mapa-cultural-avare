@@ -5,9 +5,9 @@
   <meta name="theme-color" content="#ffffff">
   <meta name="description" content="Catálogo de artistas e profissionais da cultura de Avaré. Consulte perfis, áreas de atuação, trabalhos e contatos.">
   <title>Mapa Cultural de Avaré — Catálogo de artistas</title>
-  <link rel="stylesheet" href="styles.css?v=identidade-1">
+  <link rel="stylesheet" href="styles.css?v=painel-1">
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script defer src="config.js"></script><script defer src="categorias.js"></script><script defer src="avaliacoes.js"></script><script defer src="catalogo.js"></script>
+  <script defer src="config.js"></script><script defer src="categorias.js"></script><script defer src="avaliacoes.js"></script><script defer src="painel.js"></script><script defer src="catalogo.js"></script>
 </head>
 <body class="public-site">
   <a class="skip-link" href="#catalogo">Pular para o catálogo</a>
@@ -19,7 +19,17 @@
   <main>
     <section class="directory-intro wrap" aria-labelledby="titulo-busca">
       <div><p class="directory-label">ARTISTAS E PROFISSIONAIS DA CULTURA</p><h1 id="titulo-busca">Conheça o trabalho.<br>Encontre o profissional.</h1><p class="directory-description">Pesquise artistas por especialidade, conheça suas trajetórias e acesse os contatos profissionais.</p><a class="button" href="#catalogo">Consultar artistas <span class="arrow" aria-hidden="true"></span></a></div>
-      <aside class="directory-guide" aria-label="Especialidades do catálogo"><p class="directory-guide-label">DIRETÓRIO CULTURAL</p><h2>Da criação<br>à produção.</h2><p>Áreas artísticas, linguagens e funções técnicas em um catálogo organizado por especialidade.</p><a href="#filtros">Consultar categorias <span class="arrow" aria-hidden="true"></span></a><div class="directory-counts"><span><strong id="total-artistas">0</strong> artistas publicados</span><span><strong id="total-areas">759</strong> categorias disponíveis</span></div></aside>
+      <aside class="directory-guide artist-count" aria-label="Contagem de artistas"><strong id="total-artistas">0</strong><span>artistas publicados</span></aside>
+    </section>
+    <section class="wrap artist-showcase" aria-labelledby="painel-titulo">
+      <div class="showcase-heading"><h2 id="painel-titulo">Artistas do catálogo</h2><div class="showcase-controls"><button id="painel-anterior" type="button" class="secondary" aria-label="Ver artista anterior" disabled>←</button><button id="painel-pausar" type="button" class="secondary" aria-pressed="false" disabled>Pausar</button><button id="painel-proximo" type="button" class="secondary" aria-label="Ver próximo artista" disabled>→</button></div></div>
+      <div id="painel-artistas" class="showcase-frame" aria-roledescription="carrossel" aria-label="Fotos de artistas publicados">
+        <p id="painel-vazio" class="showcase-empty" role="status">Carregando fotos dos artistas…</p>
+        <div id="painel-conteudo" class="showcase-content" hidden>
+          <img id="painel-foto" class="showcase-photo" alt="" referrerpolicy="no-referrer">
+          <div class="showcase-info"><p id="painel-area" class="showcase-area"></p><h3 id="painel-nome"></h3><p id="painel-resumo"></p><div id="painel-estrelas" class="showcase-rating"></div><p id="painel-nota" class="hint"></p><button id="painel-perfil" type="button">Ver perfil e comentários <span class="arrow" aria-hidden="true"></span></button></div>
+        </div>
+      </div>
     </section>
     <section id="catalogo" class="wrap catalog-section" aria-label="Consulta de artistas">
       <div class="search-box"><label for="busca" class="sr-only">Buscar artista, área ou bairro</label><span aria-hidden="true">⌕</span><input id="busca" type="search" placeholder="Buscar por nome, área de atuação ou bairro" disabled></div>
