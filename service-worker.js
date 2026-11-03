@@ -1,5 +1,5 @@
-const CACHE = "mapa-cultural-avare-pwa-v1";
-const SHELL = ["./", "./index.html", "./styles.css", "./assets/app-icon.svg"];
+const CACHE = "mapa-cultural-avare-pwa-v2";
+const SHELL = ["./", "./index.html", "./styles.css", "./instalar.js", "./assets/app-icon.svg"];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(SHELL)).then(() => self.skipWaiting()));
 });
@@ -15,9 +15,10 @@ self.addEventListener("fetch", event => {
     event.respondWith(fetch(request).catch(() => caches.match("./index.html")));
     return;
   }
-  if (!SHELL.some(path => url.pathname.endsWith(path.replace("./", "/")))) return;
+  const allowed = new Set(["index.html", "styles.css", "instalar.js", "app-icon.svg"]);
+  if (!allowed.has(url.pathname.split("/").pop())) return;
   event.respondWith(fetch(request).then(response => {
-    if (response.ok) { const copy = response.clone(); caches.open(CACHE).then(cache => cache.put(request, copy)); }
+    if (response.ok) { const copy = response.clone(); event.waitUntil(caches.open(CACHE).then(cache => cache.put(request, copy))); }
     return response;
   }).catch(() => caches.match(request)));
 });
