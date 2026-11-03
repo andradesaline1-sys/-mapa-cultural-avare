@@ -254,3 +254,63 @@ button[aria-pressed=true] { background: var(--blue); color: #fff; }
   .public-site .search-box input { font-size: 16px; min-width: 0; }
   .public-site .nav-links { gap: 14px; }
 }
+
+/* Navegação e leitura otimizadas para a versão web em celulares. */
+@media (max-width: 650px) {
+  .public-site .wrap { padding-inline: 18px; }
+  .public-site .header-layout { min-height: auto; gap: 12px; padding-block: 14px; }
+  .public-site .culture-logo { width: 104px; min-height: 50px; padding: 6px; }
+  .public-site .culture-logo span { font-size: .67rem; }
+  .public-site .culture-logo small { font-size: .57rem; }
+  .public-site .site-name { font-size: 1.08rem; }
+  .public-site .nav-links { gap: 18px; font-size: .83rem; }
+  .public-site .nav-links a { min-height: 44px; display: inline-flex; align-items: center; }
+  .public-site .nav-team { margin-left: auto; }
+  .public-site .directory-intro { padding-block: 30px 22px; gap: 20px; }
+  .public-site .directory-intro h1 { font-size: clamp(1.85rem, 8vw, 2.3rem); }
+  .public-site .directory-description { font-size: .94rem; line-height: 1.65; margin-bottom: 18px; }
+  .public-site .directory-intro .button { min-height: 48px; }
+  .public-site .artist-count { padding: 12px 16px; }
+  .public-site .artist-count strong { font-size: 2.3rem; }
+  .public-site .artist-showcase { padding-bottom: 30px; }
+  .public-site .showcase-heading { flex-direction: row; align-items: center; }
+  .public-site .showcase-heading h2 { font-size: 1.12rem; }
+  .public-site .showcase-controls button { min-width: 44px; min-height: 44px; padding: 8px; }
+  .public-site .showcase-photo { height: auto; aspect-ratio: 1.4; }
+  .public-site .showcase-info { padding: 18px; }
+  .public-site .showcase-info h3 { font-size: 1.4rem; }
+  .public-site .showcase-info > button { width: 100%; min-height: 46px; }
+  .public-site .search-box { min-height: 52px; }
+  .public-site .search-box input { font-size: 16px; }
+  .public-site .advanced-filters { gap: 10px; margin-block: 14px; }
+  .public-site .advanced-filters input, .public-site .advanced-filters select { min-height: 48px; font-size: 16px; }
+  .public-site .advanced-filters label { margin-bottom: 6px; }
+  .public-site .category-filters { flex-wrap: nowrap; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; padding-bottom: 10px; margin-bottom: 12px; }
+  .public-site .category-filters button { flex: 0 0 auto; min-height: 44px; font-size: .8rem; padding-inline: 13px; }
+  .public-site .view-tabs button { min-height: 44px; }
+  .public-site .results-toolbar { flex-direction: row; align-items: center; gap: 8px; }
+  .public-site .sort-control { align-self: auto; }
+  .public-site .sort-control select { max-width: 130px; min-height: 44px; }
+  .public-site .artist-grid { margin-top: 16px; gap: 16px; }
+  .public-site .artist-cover { aspect-ratio: 1.65; }
+  .public-site .artist-card-body { padding: 18px; }
+  .public-site .artist-card button { min-height: 46px; font-size: .85rem; }
+  .public-site .is-list .artist-card { grid-template-columns: 100px minmax(0,1fr); }
+  .public-site .is-list .artist-cover { min-height: 100%; }
+  .public-site .is-list .artist-card-body { padding: 14px; }
+  .public-site .is-list .artist-summary { -webkit-line-clamp: 2; }
+  .public-site dialog { width: 100%; max-width: 100%; height: 100dvh; max-height: 100dvh; margin: 0; border: 0; border-radius: 0; }
+  .public-site .dialog-close { position: sticky; top: max(8px, env(safe-area-inset-top)); float: right; margin: 8px 10px -52px 0; min-width: 44px; min-height: 44px; }
+  .public-site .profile-cover { aspect-ratio: 1.5; max-height: 260px; }
+  .public-site .profile-body { padding: 22px 18px max(28px, env(safe-area-inset-bottom)); }
+  .public-site .profile-body h2 { font-size: 1.65rem; }
+  .public-site .profile-links a { display: inline-flex; align-items: center; min-height: 44px; }
+  .public-site .reviews-section input, .public-site .reviews-section select, .public-site .reviews-section textarea { font-size: 16px; }
+  .public-site .reviews-section button { min-height: 44px; }
+  .public-site .footer-bottom { flex-wrap: wrap; }
+}
+@media (max-width: 370px) {
+  .public-site .culture-logo { display: none; }
+  .public-site .showcase-heading { align-items: flex-start; flex-direction: column; }
+  .public-site .results-toolbar { flex-direction: column; align-items: flex-start; }
+}
