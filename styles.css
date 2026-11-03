@@ -242,3 +242,15 @@ button[aria-pressed=true] { background: var(--blue); color: #fff; }
 .rating-stars-fill { display: block; height: 100%; background: #bc8a00; }
 #painel-nota { margin: 8px 0 0; font-size: .8rem; }
 @media(max-width:650px) { .artist-count { justify-self: stretch; padding: 14px 20px; min-width: 0; } .artist-count strong { font-size: 2.8rem; } .artist-count span { margin-top: 4px; } .showcase-heading { align-items: flex-start; flex-direction: column; gap: 12px; } .showcase-content { grid-template-columns: 1fr; } .showcase-photo { height: 310px; } .showcase-info { padding: 24px; } .showcase-info h3 { font-size: 1.5rem; } .showcase-empty { min-height: 160px; } }
+
+/* O aplicativo instalado é exclusivo para consulta pública; o site mantém a área da equipe. */
+@media (display-mode: standalone) {
+  .public-site .nav-team,
+  .public-site .footer-bottom a[href="equipe.html"] { display: none; }
+  .public-site .site-header { padding-top: env(safe-area-inset-top); }
+  .public-site .site-footer { padding-bottom: env(safe-area-inset-bottom); }
+}
+@media (max-width: 560px) {
+  .public-site .search-box input { font-size: 16px; min-width: 0; }
+  .public-site .nav-links { gap: 14px; }
+}
