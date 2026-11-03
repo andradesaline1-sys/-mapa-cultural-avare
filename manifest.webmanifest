@@ -1,0 +1,19 @@
+{
+  "name": "Mapa Cultural de Avaré",
+  "short_name": "Mapa Cultural",
+  "description": "Encontre artistas e profissionais da cultura de Avaré.",
+  "lang": "pt-BR",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "./assets/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
