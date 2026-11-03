@@ -10,7 +10,8 @@ self.addEventListener("fetch", event => {
   const request = event.request;
   if (request.method !== "GET" || new URL(request.url).origin !== self.location.origin) return;
   const url = new URL(request.url);
-  if (url.pathname.endsWith("/equipe.html") || request.mode === "navigate") {
+  if (url.pathname.endsWith("/equipe.html")) return;
+  if (request.mode === "navigate") {
     event.respondWith(fetch(request).catch(() => caches.match("./index.html")));
     return;
   }
