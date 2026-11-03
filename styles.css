@@ -314,3 +314,72 @@ button[aria-pressed=true] { background: var(--blue); color: #fff; }
   .public-site .showcase-heading { align-items: flex-start; flex-direction: column; }
   .public-site .results-toolbar { flex-direction: column; align-items: flex-start; }
 }
+
+/* Refinamento visual do catálogo público: editorial, limpo e acolhedor. */
+.public-site {
+  --blue: #173b58;
+  --green: #167454;
+  --flag-green: #1b8764;
+  --yellow: #e9bd6c;
+  --ink: #1b2b36;
+  --muted: #5b6c77;
+  --line: #e3e9e8;
+  background: #f9fbfa;
+}
+.public-site .site-header { background: #fff; border-top: 5px solid var(--flag-green); box-shadow: 0 3px 24px #163b4510; }
+.public-site .site-name { font-weight: 750; letter-spacing: -.035em; font-size: 1.2rem; }
+.public-site .site-name span { letter-spacing: .1em; text-transform: uppercase; font-size: .68rem; margin-top: 3px; }
+.public-site .nav-team { border-radius: 100px; background: #f2f7f5; border-color: #d9e8e1; }
+.public-site .directory-intro { position: relative; padding-top: 68px; padding-bottom: 52px; }
+.public-site .directory-label { color: var(--green); letter-spacing: .16em; }
+.public-site .directory-intro h1 { font-weight: 780; letter-spacing: -.055em; max-width: 700px; }
+.public-site .directory-description { color: #536674; font-size: 1rem; }
+.public-site .button, .public-site button:not(.category-filters button) { transition: background-color .2s ease, border-color .2s ease, transform .2s ease; }
+.public-site .button { border-radius: 100px; padding-inline: 25px; box-shadow: 0 8px 20px #173b5820; }
+.public-site .button:hover { transform: translateY(-2px); }
+.public-site .artist-count { background: linear-gradient(135deg,#eff8f2,#fff); border: 1px solid #dbece2; border-left: 5px solid var(--flag-green); border-radius: 16px; box-shadow: 0 12px 28px #1d57440b; }
+.public-site .artist-count strong { color: var(--blue); }
+.public-site .showcase-heading h2 { font-size: 1.4rem; letter-spacing: -.03em; }
+.public-site .showcase-frame { border-radius: 20px; border-color: #e0e8e5; box-shadow: 0 18px 45px #1b3a4813; }
+.public-site .showcase-photo { background: #e8efec; }
+.public-site .showcase-info { background: linear-gradient(140deg,#fff,#f5faf7); }
+.public-site .showcase-info h3 { font-weight: 760; letter-spacing: -.045em; }
+.public-site .showcase-info > button { border-radius: 100px; }
+.public-site .showcase-controls button { border-radius: 100px; background: #fff; border-color: #d7e4df; }
+.public-site .catalog-section { background: #fff; border: 1px solid #e9eeec; border-radius: 22px; padding-top: 30px; padding-bottom: 46px; margin-bottom: 55px; box-shadow: 0 12px 45px #173b5808; }
+.public-site .search-box { border-radius: 14px; border-color: #c9dad4; box-shadow: 0 4px 16px #183e4910; }
+.public-site .search-box:focus-within { border-color: var(--green); box-shadow: 0 0 0 3px #1674541b; }
+.public-site .advanced-filters input, .public-site .advanced-filters select { border-radius: 10px; border-color: #d5e2dc; }
+.public-site .category-filters button { border-radius: 100px; border-color: #d9e5df; background: #f7faf8; font-weight: 600; }
+.public-site .category-filters button[aria-pressed=true] { background: var(--blue); color: #fff; border-color: var(--blue); box-shadow: 0 4px 12px #173b5824; }
+.public-site .view-tabs button { border-radius: 10px; }
+.public-site .artist-card { border-radius: 16px; border-color: #e2eae6; box-shadow: 0 6px 20px #163b4510; transition: transform .2s ease, box-shadow .2s ease; }
+.public-site .artist-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px #163b451b; }
+.public-site .artist-card h3 { color: var(--blue); font-weight: 750; letter-spacing: -.03em; }
+.public-site .artist-card button { border-radius: 10px; background: #f2f7f5; border-color: #dce9e3; }
+.public-site .artist-card button:hover { background: #e6f2eb; }
+.public-site .tag { background: #e9f5ee; color: #166c4d; border-radius: 100px; font-weight: 600; padding: 4px 10px; }
+.public-site .empty-state { border-radius: 14px; background: #f8fbfa; }
+.public-site .catalog-about { background: #f4f8f5; border-color: #e3ece6; padding-block: 42px; }
+.public-site .catalog-about h2 { color: var(--blue); }
+.public-site .site-footer { background: #173b58; }
+.public-site dialog { border-radius: 18px; overflow-x: hidden; }
+.public-site .profile-cover { background: #e5eee9; }
+.public-site .profile-body h2 { color: var(--blue); font-weight: 760; }
+.public-site .profile-links a { border-radius: 100px; text-decoration: none; background: #f5faf7; }
+.public-site .reviews-section { border-color: #dce7e1; }
+@media (max-width: 650px) {
+  .public-site .site-name { font-size: 1.06rem; }
+  .public-site .directory-intro { padding-top: 34px; padding-bottom: 24px; }
+  .public-site .directory-intro h1 { font-size: clamp(1.9rem,8vw,2.35rem); }
+  .public-site .artist-count { border-radius: 12px; }
+  .public-site .showcase-frame { border-radius: 16px; }
+  .public-site .showcase-info { padding: 22px; }
+  .public-site .catalog-section { border-left: 0; border-right: 0; border-radius: 0; padding-top: 24px; margin-bottom: 24px; box-shadow: none; }
+  .public-site .artist-card { border-radius: 14px; }
+  .public-site .artist-card:hover { transform: none; }
+  .public-site dialog { border-radius: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .public-site .artist-card, .public-site .button, .public-site button { transition: none; }
+}
