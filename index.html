@@ -2,7 +2,10 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#173c36">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="assets/app-icon.svg">
+  <link rel="apple-touch-icon" href="assets/app-icon.svg">
   <meta name="description" content="Catálogo de artistas e profissionais da cultura de Avaré. Consulte perfis, áreas de atuação, trabalhos e contatos.">
   <title>Mapa Cultural de Avaré — Catálogo de artistas</title>
   <link rel="stylesheet" href="styles.css?v=painel-1">
@@ -47,5 +50,6 @@
   </main>
   <footer class="site-footer"><div class="footer-colors" aria-hidden="true"></div><div class="wrap footer-content"><p class="city-motto">A cultura não para!</p><div class="footer-bottom"><span>Mapa Cultural</span><a href="equipe.html">Acesso da equipe</a></div></div></footer>
   <dialog id="perfil-dialog" aria-labelledby="perfil-nome"><button id="fechar-perfil" class="dialog-close secondary" aria-label="Fechar perfil" type="button">✕</button><div id="perfil-conteudo"></div></dialog>
+  <script>if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js").catch(() => {}));</script>
 </body>
 </html>
